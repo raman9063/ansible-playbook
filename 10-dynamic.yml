@@ -1,0 +1,14 @@
+---
+- name: Update web servers with two apps
+  hosts: ub
+  become: yes
+  vars:
+    my_user: ravi
+
+  tasks:
+  - name: Copy Config File
+    template:
+      src: dynamic.j2
+      dest: /var/www/html/dynamic.html
+
+...

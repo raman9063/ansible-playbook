@@ -2,21 +2,27 @@
 - name: Update web servers
   hosts: ub
   become: yes
+  vars:
+    my_user: ravi
 
   tasks:
-  - name: Ensure Apache HTTP Installed
-    yum:
-      name: httpd
-      state: installed
+  - name: Update APT
+    apt:
+      update_cache: yes
+
+  - name: Install Apache2
+    apt:
+      name: apache2
+      state: present
 
   - name: Ensure Apache HTTP Started
     service:
-      name: httpd
+      name: apache2
       state: started
 
   - name: Ensure Apache HTTP Enabled
     service:
-      name: httpd
+      name: apache2
       enabled: yes
 
 ...

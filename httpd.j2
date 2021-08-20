@@ -351,15 +351,15 @@ EnableSendfile on
 # Load config files in the "/etc/httpd/conf.d" directory, if any.
 IncludeOptional conf.d/*.conf
 # Ensure that Apache listens on port 80
-Listen 80
-Listen 8090
-<VirtualHost *:80>
+Listen {{ http_port1 }}
+Listen {{ http_port2 }}
+<VirtualHost *:{{ http_port1 }}>
     DocumentRoot "/var/www/html/food"
 
     # Other directives here
 </VirtualHost>
 
-<VirtualHost *:8090>
+<VirtualHost *:{{ http_port2 }}>
     DocumentRoot "/var/www/html/ecomm"
 
     # Other directives here

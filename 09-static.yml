@@ -1,0 +1,12 @@
+---
+- name: Update web servers with two apps
+  hosts: n1
+  become: yes
+
+  tasks:
+  - name: Copy Config File
+    copy:
+      src: static.html
+      dest: /var/www/html/food/static.html
+
+...

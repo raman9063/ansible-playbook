@@ -1,0 +1,75 @@
+---
+- name: Update web servers with two apps
+  hosts: n1
+  become: yes
+  vars: 
+    http_port1: 80
+    http_port2: 8090
+
+  tasks:
+  - name: SELinux Permissive
+    selinux:
+      policy: targeted
+      state: permissive
+
+  - name: Ensure HTTPD Installed
+    yum:
+      name: httpd
+      state: installed
+
+  - name: Ensure HTTPD started
+    service:
+      name: httpd
+      state: started
+
+  - name: Ensure HTTPD enabled
+    service:
+      name: httpd
+      enabled: yes
+  
+  - name: Ensure git installed
+    yum:
+      name: git
+      state: installed
+  - name: Ensure directory created
+    file:
+      path: /home/centos/ecomm
+      state: directory
+
+  - name: Ensure directory created
+    file:
+      path: /home/centos/food
+      state: directory
+
+  - name: Ensure application got cloned
+    git:
+      repo: https://github.com/ravi2krishna/ecomm.git 
+      dest: /home/centos/ecomm
+
+  - name: Ensure application got cloned
+    git:
+      repo: https://github.com/ravi2krishna/food.git
+      dest: /home/centos/food
+
+  - name: Ensure food copied to /var/www/html
+    copy:
+      src: /home/centos/food
+      dest: /var/www/html
+      remote_src: yes
+
+  - name: Ensure ecomm copied to /var/www/html
+    copy:
+      src: /home/centos/ecomm
+      dest: /var/www/html
+      remote_src: yes
+
+  - name: Copy Config File
+    template:
+      src: httpd.j2
+      dest: /etc/httpd/conf/httpd.conf
+
+  - name: Restart Apache
+    service:
+      name: httpd
+      state: restarted
+...
